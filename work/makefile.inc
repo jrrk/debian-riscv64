@@ -30,6 +30,8 @@ init: chroot
 	cp -p ${CHROOT_PATH}/bin/bash-static ./bin
 	cp -p ${CHROOT_PATH}/sbin/ifconfig ./sbin
 	cp -p ${CHROOT_PATH}/sbin/switch_root ./sbin
+	cp -p ${CHROOT_PATH}/bin/ls ./bin
+	cp -p ${CHROOT_PATH}/bin/dmesg ./bin
 	cp -p ${CHROOT_PATH}/bin/ping ./bin
 	cp -p ${CHROOT_PATH}/bin/more ./bin
 	cp -p ${CHROOT_PATH}/bin/mount ./bin
@@ -54,7 +56,7 @@ init: chroot
 	#cp -p ${CHROOT_PATH}/lib/riscv64-linux-gnu/libsepol.so.1 ./lib/riscv64-linux-gnu
 	cp -p ${CHROOT_PATH}/lib/riscv64-linux-gnu/libuuid.so.1 ./lib/riscv64-linux-gnu
 	cp -p ${CHROOT_PATH}/lib/riscv64-linux-gnu/libpcre.so.3 ./lib/riscv64-linux-gnu
-	cp -p ${CHROOT_PATH}/lib/riscv64-linux-gnu/libtinfo.so.5 ./lib/riscv64-linux-gnu
+	cp -p ${CHROOT_PATH}/lib/riscv64-linux-gnu/libtinfo.so.6 ./lib/riscv64-linux-gnu
 	cp -p ${CHROOT_PATH}/lib/riscv64-linux-gnu/libblkid.so.1 ./lib/riscv64-linux-gnu
 	cp -p ${CHROOT_PATH}/lib/riscv64-linux-gnu/libmount.so.1 ./lib/riscv64-linux-gnu
 	#cp -p ${CHROOT_PATH}/lib/riscv64-linux-gnu/libcrypt.so.1 ./lib/riscv64-linux-gnu
