@@ -1,7 +1,4 @@
 export CHROOT_PATH=/mnt/debian
-cd /local/scratch-legacy/jrrk2/debian-riscv64
-
-sudo apt-get install multistrap debian-ports-archive-keyring qemu-user-static
 
 dd if=/dev/zero of=cardmem.bin bs=2M count=2047
 echo ' # partition table of image\' \
