@@ -63,8 +63,7 @@ rm -fr ramfs
 mkdir ramfs
 cd ramfs
 mkdir -p bin etc dev home lib proc sbin sys tmp usr mnt nfs root run usr/bin usr/lib usr/sbin usr/share/perl5 lib/riscv64-linux-gnu usr/lib/riscv64-linux-gnu # usr/share/sysvinit
-#cp -p ${CHROOT_PATH}/bin/ash ./bin
-cp -p ${CHROOT_PATH}/bin/dash ./bin
+cp -p ${CHROOT_PATH}/bin/bash-static ./bin
 cp -p ${CHROOT_PATH}/sbin/ifconfig ./sbin
 cp -p ${CHROOT_PATH}/sbin/switch_root ./sbin
 cp -p ${CHROOT_PATH}/bin/mount ./bin
@@ -109,7 +108,9 @@ cp -p ${CHROOT_PATH}/lib/ld-linux-riscv64-lp64d.so.1 ./lib
 #cp -pr ${CHROOT_PATH}/usr/lib/riscv64-linux-gnu/perl-base ./usr/lib/riscv64-linux-gnu
 #cp -pr ${CHROOT_PATH}/usr/share/perl5/Debian ./usr/share/perl5
 cat > init <<EOF
-#!/bin/dash
+#!/bin/bash-static
+echo Exit shell when ready to switch_root
+/bin/bash-static -i
 ifconfig eth0 192.168.0.51 up
 echo Waiting for the sd card ...
 sleep 10
@@ -117,24 +118,31 @@ echo Mounting the sd partition ...
 mount -t ext2 /dev/mmcblk0p1 /mnt || dash
 # Mount the /proc and /sys filesystems.
 echo Mounting proc
+mkdir -p /mnt/proc
 mount -t proc none /mnt/proc
 echo Mounting sysfs
+mkdir -p /mnt/sys
 mount -t sysfs none /mnt/sys
 echo Mounting devtmpfs
+mkdir -p /mnt/dev
 mount -t devtmpfs udev /mnt/dev
 mkdir -p /mnt/dev/pts
 echo Mounting devpts
 mount -t devpts devpts /mnt/dev/pts
 echo Mounting tmpfs
+mkdir -p /mnt/tmp
 mount -t tmpfs tmpfs /mnt/tmp
+mkdir -p /run
 mount -t tmpfs tmpfs /run
 # Do your stuff here.
 echo "switch_root"
 # Boot the real thing.
-exec switch_root /mnt /sbin/init
+exec switch_root /mnt /bin/bash-static
+#exec switch_root /mnt /sbin/init
 EOF
 chmod +x init
-#ln -s /bin/dash init
+#mv init{,rc}
+#ln -s /bin/bash init
 echo "\
         mknod dev/null c 1 3 && \
         mknod dev/tty c 5 0 && \
