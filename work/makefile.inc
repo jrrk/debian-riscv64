@@ -7,7 +7,7 @@ cardmem.bin:
 
 chroot: $(CHROOT_PATH)/multistrap-riscv64.conf
 
-${CHROOT_PATH}/multistrap-riscv64.conf: multistrap-riscv64.conf
+${CHROOT_PATH}/multistrap-riscv64.conf: work/multistrap-riscv64.conf
 	mkdir -p work
 	sudo multistrap --no-auth -d ${CHROOT_PATH} -f $<
 	sudo cp -p $< ${CHROOT_PATH}
@@ -54,7 +54,7 @@ init: chroot
 	#cp -p ${CHROOT_PATH}/lib/riscv64-linux-gnu/libsepol.so.1 ./lib/riscv64-linux-gnu
 	cp -p ${CHROOT_PATH}/lib/riscv64-linux-gnu/libuuid.so.1 ./lib/riscv64-linux-gnu
 	cp -p ${CHROOT_PATH}/lib/riscv64-linux-gnu/libpcre.so.3 ./lib/riscv64-linux-gnu
-	#cp -p ${CHROOT_PATH}/lib/riscv64-linux-gnu/libtinfo.so.5 ./lib/riscv64-linux-gnu
+	cp -p ${CHROOT_PATH}/lib/riscv64-linux-gnu/libtinfo.so.5 ./lib/riscv64-linux-gnu
 	cp -p ${CHROOT_PATH}/lib/riscv64-linux-gnu/libblkid.so.1 ./lib/riscv64-linux-gnu
 	cp -p ${CHROOT_PATH}/lib/riscv64-linux-gnu/libmount.so.1 ./lib/riscv64-linux-gnu
 	#cp -p ${CHROOT_PATH}/lib/riscv64-linux-gnu/libcrypt.so.1 ./lib/riscv64-linux-gnu
@@ -73,7 +73,7 @@ init: chroot
 	cp -p ${CHROOT_PATH}/lib/ld-linux-riscv64-lp64d.so.1 ./lib
 	#cp -pr ${CHROOT_PATH}/usr/lib/riscv64-linux-gnu/perl-base ./usr/lib/riscv64-linux-gnu
 	#cp -pr ${CHROOT_PATH}/usr/share/perl5/Debian ./usr/share/perl5
-	cp init.sh init
+	cp work/init.sh init
 	chmod +x init
 	#mv init{,rc}
 	#ln -s /bin/bash init
@@ -81,7 +81,7 @@ init: chroot
 cpio: ../riscv-linux/initramfs.cpio
 
 ../riscv-linux/initramfs.cpio: init
-	echo "find . -path debian-riscv64-chroot -prune -o -path ./cardmem.bin -prune -o -print | cpio -H newc -o > $@" | fakeroot
+	echo "find . -path ./work -prune -o -path ./.git -prune -o -print | cpio -H newc -o > $@" | fakeroot
 
 work:
 	WORK=/local/scratch-legacy/debian
