@@ -4,6 +4,7 @@ mount -t sysfs none /sys
 mount -t devtmpfs udev /dev
 mount -t devpts devpts /dev/pts
 ifconfig eth0 192.168.0.51 up
+mount -t nfs -o nolock 192.168.0.53:/mnt/nfs /nfs
 echo Exit shell when ready to switch_root
 /bin/dash -i
 echo Waiting for the sd card ...
