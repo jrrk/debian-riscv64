@@ -1,7 +1,11 @@
-#!/bin/bash-static
-echo Exit shell when ready to switch_root
-/bin/bash-static -i
+#!/bin/dash
+mount -t proc none /proc
+mount -t sysfs none /sys
+mount -t devtmpfs udev /dev
+mount -t devpts devpts /dev/pts
 ifconfig eth0 192.168.0.51 up
+echo Exit shell when ready to switch_root
+/bin/dash -i
 echo Waiting for the sd card ...
 sleep 10
 echo Mounting the sd partition ...
@@ -26,6 +30,10 @@ mkdir -p /run
 mount -t tmpfs tmpfs /run
 # Do your stuff here.
 echo "switch_root"
+umount /proc
+umount /sys
+umount /dev/pts
+umount /dev
 # Boot the real thing.
-exec switch_root /mnt /bin/bash-static
+exec switch_root /mnt /bin/dash
 #exec switch_root /mnt /sbin/init
