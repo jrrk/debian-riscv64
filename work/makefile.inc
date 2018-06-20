@@ -30,13 +30,17 @@ init: chroot
 	cp -p ${CHROOT_PATH}/bin/mkdir ./bin
 	cp -p ${CHROOT_PATH}/bin/sleep ./bin
 	cp -p ${CHROOT_PATH}/usr/bin/free ./usr/bin
+	cp -p ${CHROOT_PATH}/usr/bin/ssh ./usr/bin
+	cp -p ${CHROOT_PATH}/usr/bin/rdate ./usr/bin
 	cp -p ${CHROOT_PATH}/usr/sbin/arp ./usr/sbin
 	cp -p ${CHROOT_PATH}/usr/sbin/chroot ./usr/sbin
 	cp -p ${CHROOT_PATH}/usr/share/base-passwd/passwd.master ./etc/passwd
 	cp -p ${CHROOT_PATH}/usr/share/base-passwd/group.master ./etc/group
 	cp -p ${CHROOT_PATH}/lib/riscv64-linux-gnu/libc.so.6 ./lib/riscv64-linux-gnu
 	cp -p ${CHROOT_PATH}/lib/riscv64-linux-gnu/libm.so.6 ./lib/riscv64-linux-gnu
-	#cp -p ${CHROOT_PATH}/lib/riscv64-linux-gnu/libz.so.1 ./lib/riscv64-linux-gnu
+	cp -p ${CHROOT_PATH}/lib/riscv64-linux-gnu/libz.so.1 ./lib/riscv64-linux-gnu
+	cp -p ${CHROOT_PATH}/lib/riscv64-linux-gnu/libbsd.so.0 ./lib/riscv64-linux-gnu
+	cp -p ${CHROOT_PATH}/lib/riscv64-linux-gnu/libutil.so.1 ./lib/riscv64-linux-gnu
 	#cp -p ${CHROOT_PATH}/lib/riscv64-linux-gnu/libbz2.so.1.0 ./lib/riscv64-linux-gnu
 	#cp -p ${CHROOT_PATH}/lib/riscv64-linux-gnu/libfdisk.so.1 ./lib/riscv64-linux-gnu
 	#cp -p ${CHROOT_PATH}/lib/riscv64-linux-gnu/libsmartcols.so.1 ./lib/riscv64-linux-gnu
@@ -63,9 +67,10 @@ init: chroot
 	cp -p ${CHROOT_PATH}/lib/riscv64-linux-gnu/libselinux.so.1 ./lib/riscv64-linux-gnu
 	cp -p ${CHROOT_PATH}/lib/riscv64-linux-gnu/libpthread.so.0 ./lib/riscv64-linux-gnu
 	cp -p ${CHROOT_PATH}/lib/riscv64-linux-gnu/libkeyutils.so.1 ./lib/riscv64-linux-gnu
+	cp -p ${CHROOT_PATH}/lib/riscv64-linux-gnu/liblzma.so.5 ./lib/riscv64-linux-gnu
 	#cp -p ${CHROOT_PATH}/usr/lib/riscv64-linux-gnu/libsemanage.so.1 ./usr/lib/riscv64-linux-gnu
 	cp -p ${CHROOT_PATH}/usr/lib/riscv64-linux-gnu/libgssapi_krb5.so.2 ./usr/lib/riscv64-linux-gnu
-	#cp -p ${CHROOT_PATH}/usr/lib/riscv64-linux-gnu/libcrypto.so.1.0.2 ./usr/lib/riscv64-linux-gnu
+	cp -p ${CHROOT_PATH}/usr/lib/riscv64-linux-gnu/libcrypto.so.1.0.2 ./usr/lib/riscv64-linux-gnu
 	#cp -p ${CHROOT_PATH}/usr/lib/riscv64-linux-gnu/libpcap.so.0.8 ./usr/lib/riscv64-linux-gnu
 	cp -p ${CHROOT_PATH}/usr/lib/riscv64-linux-gnu/libnettle.so.6 ./usr/lib/riscv64-linux-gnu
 	cp -p ${CHROOT_PATH}/usr/lib/riscv64-linux-gnu/libkrb5.so.3 ./usr/lib/riscv64-linux-gnu
@@ -75,7 +80,8 @@ init: chroot
 	#cp -pr ${CHROOT_PATH}/usr/lib/riscv64-linux-gnu/perl-base ./usr/lib/riscv64-linux-gnu
 	#cp -pr ${CHROOT_PATH}/usr/share/perl5/Debian ./usr/share/perl5
 	cp work/nsswitch.conf ./etc
-	cp work/init.sh init
+	#cp work/init.sh init
+	cp work/nfs.sh init
 	chmod +x init
 	#mv init{,rc}
 	#ln -s /bin/bash init
