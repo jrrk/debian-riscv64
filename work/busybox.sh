@@ -1,11 +1,10 @@
 #!/bin/busybox ash
 /bin/busybox --install -s
-rm /bin/switch_root
-ifconfig eth0 192.168.0.51 up
-rdate -s 192.168.0.53
 mount -t proc none /proc
+udhcpc -s /usr/share/udhcpc/default.script
+rdate -s 132.163.97.4 # This should be replaced by a local server
 echo Mounting NFS root
-mount.nfs 192.168.0.53:/mnt/nfs /nfs
+mount.nfs 128.232.65.94:/mnt/nfs /nfs
 echo Mounting proc
 mkdir -p /nfs/proc
 mount -t proc none /nfs/proc
@@ -27,5 +26,5 @@ mount -t tmpfs tmpfs /run
 #busybox ash
 umount /proc
 #exec switch_root /nfs /usr/sbin/dropbear
-#exec switch_root /nfs /sbin/init
-exec switch_root /nfs /bin/dash
+exec switch_root /nfs /sbin/init
+#exec switch_root /nfs /bin/dash

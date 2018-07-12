@@ -1,3 +1,5 @@
 debian-riscv64-chroot/
 cardmem.bin
+client
+server
 *~

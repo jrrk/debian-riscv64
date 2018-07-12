@@ -88,7 +88,8 @@ oldinit: chroot
 
 init: chroot
 	make clean
-	mkdir -p bin etc dev home lib proc sbin sys tmp usr mnt nfs root run usr/bin usr/lib usr/sbin usr/share/perl5 lib/riscv64-linux-gnu usr/lib/riscv64-linux-gnu # usr/share/sysvinit
+	mkdir -p bin etc dev home lib proc sbin sys tmp usr mnt nfs root run usr/bin usr/lib usr/sbin usr/share/perl5 usr/share/udhcpc lib/riscv64-linux-gnu usr/lib/riscv64-linux-gnu # usr/share/sysvinit
+	cp -p work/usr-share-udhcpc-default.script usr/share/udhcpc/default.script
 	cp -p ${CHROOT_PATH}/sbin/mount.nfs ./sbin
 	cp -p ${CHROOT_PATH}/sbin/switch_root ./sbin
 	cp -p ${CHROOT_PATH}/bin/busybox ./bin
@@ -126,7 +127,7 @@ initmmc: chroot
 
 cpio: ../riscv-linux/initramfs.cpio
 
-../riscv-linux/initramfs.cpio: initmmc
+../riscv-linux/initramfs.cpio: init#mmc
 	echo "mknod dev/null c 1 3; mknod dev/tty c 5 0; mknod dev/zero c 1 5; mknod dev/console c 5 1; mknod dev/random c 1 8; mknod dev/urandom c 1 9; mknod dev/mmcblk0 b 179 0; mknod dev/mmcblk0p1 b 179 1; mknod dev/mmcblk0p2 b 179 2; find . -path ./work -prune -o -path ./.git -prune -o -print | cpio -H newc -o > $@" | fakeroot
 
 deps:
