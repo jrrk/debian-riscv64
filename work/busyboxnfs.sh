@@ -4,7 +4,7 @@ mount -t proc none /proc
 udhcpc -s /usr/share/udhcpc/default.script
 rdate -s 132.163.97.4 # This should be replaced by a local server
 echo Mounting NFS root
-mount.nfs 128.232.65.94:/mnt/nfs /nfs
+mount.nfs -o nolock 128.232.65.94:/mnt/nfs2 /nfs 
 echo Mounting proc
 mkdir -p /nfs/proc
 mount -t proc none /nfs/proc

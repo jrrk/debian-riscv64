@@ -9,7 +9,8 @@ chroot: $(CHROOT_PATH)/multistrap-riscv64.conf
 
 ${CHROOT_PATH}/multistrap-riscv64.conf: work/multistrap-riscv64.conf
 	mkdir -p work
-	sudo multistrap --no-auth -d ${CHROOT_PATH} -f $<
+	sudo apt-key adv --recv-keys --keyserver keyserver.ubuntu.com 06AED62430CB581C 8B48AD6246925553 7638D0442B90D010 04EE7237B7D453EC
+	sudo multistrap -d ${CHROOT_PATH} -f $<
 	sudo cp -p $< ${CHROOT_PATH}
 
 clean:
@@ -86,7 +87,7 @@ oldinit: chroot
 	#mv init{,rc}
 	#ln -s /bin/bash init
 
-init: chroot
+initnfs: chroot
 	make clean
 	mkdir -p bin etc dev home lib proc sbin sys tmp usr mnt nfs root run usr/bin usr/lib usr/sbin usr/share/perl5 usr/share/udhcpc lib/riscv64-linux-gnu usr/lib/riscv64-linux-gnu # usr/share/sysvinit
 	cp -p work/usr-share-udhcpc-default.script usr/share/udhcpc/default.script
@@ -112,7 +113,7 @@ init: chroot
 	cp -p ${CHROOT_PATH}/lib/riscv64-linux-gnu/libselinux.so.1 ./lib/riscv64-linux-gnu
 	cp -p ${CHROOT_PATH}/lib/riscv64-linux-gnu/libtirpc.so.1 ./lib/riscv64-linux-gnu
 	cp -p ${CHROOT_PATH}/lib/riscv64-linux-gnu/libuuid.so.1 ./lib/riscv64-linux-gnu
-	cp work/busybox.sh init
+	cp work/busyboxnfs.sh init
 	chmod +x init
 
 initmmc: chroot
@@ -125,9 +126,12 @@ initmmc: chroot
 	cp work/busyboxmmc.sh init
 	chmod +x init
 
-cpio: ../riscv-linux/initramfs.cpio
+cpio: ../riscv-linux/initramfsnfs.cpio ../riscv-linux/initramfsmmc.cpio
 
-../riscv-linux/initramfs.cpio: init#mmc
+../riscv-linux/initramfsnfs.cpio: initnfs
+	echo "mknod dev/null c 1 3; mknod dev/tty c 5 0; mknod dev/zero c 1 5; mknod dev/console c 5 1; mknod dev/random c 1 8; mknod dev/urandom c 1 9; mknod dev/mmcblk0 b 179 0; mknod dev/mmcblk0p1 b 179 1; mknod dev/mmcblk0p2 b 179 2; find . -path ./work -prune -o -path ./.git -prune -o -print | cpio -H newc -o > $@" | fakeroot
+
+../riscv-linux/initramfsmmc.cpio: initmmc
 	echo "mknod dev/null c 1 3; mknod dev/tty c 5 0; mknod dev/zero c 1 5; mknod dev/console c 5 1; mknod dev/random c 1 8; mknod dev/urandom c 1 9; mknod dev/mmcblk0 b 179 0; mknod dev/mmcblk0p1 b 179 1; mknod dev/mmcblk0p2 b 179 2; find . -path ./work -prune -o -path ./.git -prune -o -print | cpio -H newc -o > $@" | fakeroot
 
 deps:
