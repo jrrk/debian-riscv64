@@ -2,7 +2,7 @@
 /bin/busybox --install -s
 sleep 2
 echo Mounting SD root
-mount -t ext2 /dev/mmcblk0p2 /mnt || (echo Mount failed, dropping to ash)
+mount -t ext3 /dev/mmcblk0p2 /mnt || (echo Mount failed, dropping to ash; /bin/ash)
 echo Mounting proc
 mkdir -p /mnt/proc
 mount -t proc none /mnt/proc
