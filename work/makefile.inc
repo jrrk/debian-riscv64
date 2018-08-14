@@ -5,12 +5,12 @@ cardmem.bin:
 	dd if=/dev/zero of=work/cardmem.bin bs=2M count=2047
 	sh cardmem.sh
 
-chroot: $(CHROOT_PATH)/multistrap-riscv64.conf
+chroot: $(CHROOT_PATH)/debootstrap/debootstrap.log
 
-${CHROOT_PATH}/multistrap-riscv64.conf: work/multistrap-riscv64.conf
+${CHROOT_PATH}/debootstrap/debootstrap.log: work/mybootstrap.sh
 	mkdir -p work
 	sudo apt-key adv --recv-keys --keyserver keyserver.ubuntu.com 06AED62430CB581C 8B48AD6246925553 7638D0442B90D010 04EE7237B7D453EC
-	sudo multistrap -d ${CHROOT_PATH} -f $<
+	sh work/mybootstrap.sh
 	sudo cp -p $< ${CHROOT_PATH}
 
 clean:
