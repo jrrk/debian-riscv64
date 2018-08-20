@@ -1,7 +1,7 @@
 #!/bin/busybox ash
 /bin/busybox --install -s
-echo exit shell when ready to continue booting
-/bin/ash
+#echo exit shell when ready to continue booting
+#/bin/ash
 sleep 2
 echo Mounting SD root
 mount -t ext3 /dev/mmcblk0p2 /mnt || (echo Mount failed, dropping to ash; /bin/ash)
