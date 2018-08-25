@@ -119,10 +119,31 @@ initnfs: chroot
 initmmc: chroot
 	make clean
 	mkdir -p bin etc dev home lib proc sbin sys tmp usr mnt nfs root run usr/bin usr/lib usr/sbin usr/share/perl5 lib/riscv64-linux-gnu usr/lib/riscv64-linux-gnu # usr/share/sysvinit
+	cp -p ${CHROOT_PATH}/sbin/fdisk ./sbin
+	cp -p ${CHROOT_PATH}/sbin/fsck ./sbin
+	cp -p ${CHROOT_PATH}/sbin/fsck.ext2 ./sbin
+	cp -p ${CHROOT_PATH}/sbin/fsck.ext3 ./sbin
+	cp -p ${CHROOT_PATH}/sbin/fsck.ext4 ./sbin
+	cp -p ${CHROOT_PATH}/sbin/fsck.msdos ./sbin
 	cp -p ${CHROOT_PATH}/sbin/switch_root ./sbin
 	cp -p ${CHROOT_PATH}/bin/busybox ./bin
 	cp -p ${CHROOT_PATH}/lib/ld-linux-riscv64-lp64d.so.1 ./lib
 	cp -p ${CHROOT_PATH}/lib/riscv64-linux-gnu/libc.so.6 ./lib/riscv64-linux-gnu
+	cp -p ${CHROOT_PATH}/lib/riscv64-linux-gnu/libuuid.so.1 ./lib/riscv64-linux-gnu
+	cp -p ${CHROOT_PATH}/lib/riscv64-linux-gnu/libfdisk.so.1 ./lib/riscv64-linux-gnu
+	cp -p ${CHROOT_PATH}/lib/riscv64-linux-gnu/libsmartcols.so.1 ./lib/riscv64-linux-gnu
+	cp -p ${CHROOT_PATH}/lib/riscv64-linux-gnu/libtinfo.so.6 ./lib/riscv64-linux-gnu
+	cp -p ${CHROOT_PATH}/lib/riscv64-linux-gnu/libuuid.so.1 ./lib/riscv64-linux-gnu
+	cp -p ${CHROOT_PATH}/lib/riscv64-linux-gnu/libblkid.so.1 ./lib/riscv64-linux-gnu
+	cp -p ${CHROOT_PATH}/lib/riscv64-linux-gnu/libmount.so.1 ./lib/riscv64-linux-gnu
+	cp -p ${CHROOT_PATH}/lib/riscv64-linux-gnu/librt.so.1 ./lib/riscv64-linux-gnu
+	cp -p ${CHROOT_PATH}/lib/riscv64-linux-gnu/libselinux.so.1 ./lib/riscv64-linux-gnu
+	cp -p ${CHROOT_PATH}/lib/riscv64-linux-gnu/libpthread.so.0 ./lib/riscv64-linux-gnu
+	cp -p ${CHROOT_PATH}/lib/riscv64-linux-gnu/libpcre.so.3 ./lib/riscv64-linux-gnu
+	cp -p ${CHROOT_PATH}/lib/riscv64-linux-gnu/libdl.so.2 ./lib/riscv64-linux-gnu
+	cp -p ${CHROOT_PATH}/lib/riscv64-linux-gnu/libext2fs.so.2 ./lib/riscv64-linux-gnu
+	cp -p ${CHROOT_PATH}/lib/riscv64-linux-gnu/libe2p.so.2 ./lib/riscv64-linux-gnu
+	cp -p ${CHROOT_PATH}/lib/riscv64-linux-gnu/libcom_err.so.2 ./lib/riscv64-linux-gnu
 	cp work/busyboxmmc.sh init
 	chmod +x init
 
