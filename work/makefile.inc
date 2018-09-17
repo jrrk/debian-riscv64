@@ -1,10 +1,30 @@
 export CHROOT_PATH=work/debian-riscv64-chroot
 
-cardmem.bin:
+disks: work/cardmem.log
+	sudo mkdir -p /mnt/deadbeef-02
+	sudo mount -t ext4 /dev/`grep deadbeef-02 $< | cut -d\" -f2` /mnt/deadbeef-02
+	sudo tar cf - -C ${CHROOT_PATH} . | sudo tar xf - -C /mnt/deadbeef-02
+	sudo umount /mnt/deadbeef-02
+
+cardmem: work/cardmem.log
+
+work/cardmem.bin:
 	mkdir -p work
 	dd if=/dev/zero of=work/cardmem.bin bs=2M count=2047
-	sh cardmem.sh
 
+work/cardmem.log: work/cardmem.bin
+	sh work/cardmem.sh
+	sudo partx -a work/cardmem.bin
+	lsblk -P -o +PARTUUID | grep deadbeef | tail -3 > $@
+
+mkfs: work/cardmem.log
+	sudo mkfs -t msdos /dev/`grep deadbeef-01 $< | cut -d\" -f2`
+	sudo mkfs -t ext4 /dev/`grep deadbeef-02 $< | cut -d\" -f2`
+	sudo mkswap /dev/`grep deadbeef-03 $< |cut -d\" -f2`
+
+cleanlo: work/cardmem.log
+	grep deadbeef $< | cut -d\" -f2 | sed 's=^=/dev/=' | tee /dev/tty | xargs sudo losetup -d
+	
 chroot: $(CHROOT_PATH)/mybootstrap.sh
 
 ${CHROOT_PATH}/mybootstrap.sh: work/mybootstrap.sh
@@ -136,11 +156,3 @@ cpio: ../riscv-linux/initramfsnfs.cpio ../riscv-linux/initramfsmmc.cpio
 
 deps:
 	@find . -path ./work -prune -o -path ./.git -prune -o -print|xargs file|grep RISC-V|cut -d: -f1|xargs riscv64-unknown-elf-readelf -d |grep NEEDED|cut -d: -f2|sort -u
-
-work:
-	WORK=/local/scratch-legacy/debian
-	sudo rm -rf $WORK
-	sudo mkdir -p $WORK
-	(cd ${CHROOT_PATH}; sudo tar cf - .)|(cd $WORK; sudo tar xf -)
-	sudo umount ${CHROOT_PATH}
-	sudo losetup -d $LOOP
