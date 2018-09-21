@@ -20,6 +20,5 @@ mkdir -p /mnt/tmp
 mount -t tmpfs tmpfs /mnt/tmp
 mkdir -p /mnt/run
 mount -t tmpfs tmpfs /mnt/run
-mv /bin/busybox /mnt/bin
 echo Executing switch_root
 exec switch_root /mnt /sbin/init
