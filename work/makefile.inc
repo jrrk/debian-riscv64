@@ -1,8 +1,8 @@
 export CHROOT_PATH=work/debian-riscv64-chroot
 
-chroot: work/rootfs.tar.xz
+chroot: ../rootfs.tar.xz
 
-work/rootfs.tar.xz: $(CHROOT_PATH)/mybootstrap.sh
+../rootfs.tar.xz: $(CHROOT_PATH)/mybootstrap.sh
 	sudo tar cJf - -C ${CHROOT_PATH} . > $@
 
 ${CHROOT_PATH}/mybootstrap.sh: work/mybootstrap.sh
