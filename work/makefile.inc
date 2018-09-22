@@ -1,31 +1,9 @@
 export CHROOT_PATH=work/debian-riscv64-chroot
 
-disks: work/cardmem.log
-	sudo mkdir -p /mnt/deadbeef-02
-	sudo mount -t ext4 /dev/`grep deadbeef-02 $< | cut -d\" -f2` /mnt/deadbeef-02
-	sudo tar cf - -C ${CHROOT_PATH} . | sudo tar xf - -C /mnt/deadbeef-02
-	sudo umount /mnt/deadbeef-02
+chroot: ../rootfs.tar.xz
 
-cardmem: work/cardmem.log
-
-work/cardmem.bin:
-	mkdir -p work
-	dd if=/dev/zero of=work/cardmem.bin bs=2M count=2047
-
-work/cardmem.log: work/cardmem.bin
-	sh work/cardmem.sh
-	sudo partx -a work/cardmem.bin
-	lsblk -P -o +PARTUUID | grep deadbeef | tail -3 > $@
-
-mkfs: work/cardmem.log
-	sudo mkfs -t msdos /dev/`grep deadbeef-01 $< | cut -d\" -f2`
-	sudo mkfs -t ext4 /dev/`grep deadbeef-02 $< | cut -d\" -f2`
-	sudo mkswap /dev/`grep deadbeef-03 $< |cut -d\" -f2`
-
-cleanlo: work/cardmem.log
-	grep deadbeef $< | cut -d\" -f2 | sed 's=^=/dev/=' | tee /dev/tty | xargs sudo losetup -d
-	
-chroot: $(CHROOT_PATH)/mybootstrap.sh
+../rootfs.tar.xz: $(CHROOT_PATH)/mybootstrap.sh
+	sudo tar cJf - -C ${CHROOT_PATH} . > $@
 
 ${CHROOT_PATH}/mybootstrap.sh: work/mybootstrap.sh
 	mkdir -p work
