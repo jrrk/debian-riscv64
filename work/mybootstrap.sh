@@ -41,5 +41,9 @@ sudo cp work/interfaces work/debian-riscv64-chroot/etc/network
 sudo cp work/hostname work/debian-riscv64-chroot/etc
 #Delete the root password (user will set it later)
 sudo chroot work/debian-riscv64-chroot passwd -d root
+#Setup locales
+sudo chroot work/debian-riscv64-chroot dpkg-reconfigure locales
+#Setup timezone
+sudo chroot work/debian-riscv64-chroot dpkg-reconfigure tzdata
 #Remove the dummy start-stop-daemon
 #sudo chroot work/debian-riscv64-chroot mv /sbin/start-stop-daemon{.REAL,}
