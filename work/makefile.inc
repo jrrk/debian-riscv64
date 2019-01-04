@@ -1,14 +1,14 @@
 export CHROOT_PATH=work/debian-riscv64-chroot
 
-cpio: ../riscv-linux/initramfs.cpio
+cpio: ../work/initramfs.cpio
 
 chroot: ../rootfs.tar.xz
 
-../qemu/riscv64-linux-user/qemu-riscv64:
+../riscv-qemu/riscv64-linux-user/qemu-riscv64:
 	(cd ../qemu; ./configure --static --disable-system --target-list=riscv64-linux-user)
 	make -C ../qemu -j 4
 
-../rootfs.tar.xz: work/mybootstrap.sh ../qemu/riscv64-linux-user/qemu-riscv64
+../rootfs.tar.xz: work/mybootstrap.sh ../riscv-qemu/riscv64-linux-user/qemu-riscv64
 	sudo apt-key adv --recv-keys --keyserver keyserver.ubuntu.com 06AED62430CB581C 8B48AD6246925553 7638D0442B90D010 04EE7237B7D453EC DA1B2CEA81DCBC61
 	sh work/mybootstrap.sh
 	sudo tar cJf - -C ${CHROOT_PATH} . > $@
@@ -42,7 +42,7 @@ init: ../rootfs.tar.xz work/busyboxinit.sh
 	cp work/busyboxinit.sh init
 	chmod +x init
 
-../riscv-linux/initramfs.cpio: init
+../work/initramfs.cpio: init
 	echo "mknod dev/null c 1 3; mknod dev/tty c 5 0; mknod dev/zero c 1 5; mknod dev/console c 5 1; mknod dev/random c 1 8; mknod dev/urandom c 1 9; mknod dev/mmcblk0 b 179 0; mknod dev/mmcblk0p1 b 179 1; mknod dev/mmcblk0p2 b 179 2; mknod dev/gpio0 c 200 0; find . -path ./work -prune -o -path ./.git -prune -o -print | cpio -H newc -o > $@" | fakeroot
 
 deps:

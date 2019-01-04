@@ -1,9 +1,6 @@
 #!/bin/busybox ash
 /bin/busybox --install -s
-dd if=/dev/gpio0 of=/tmp/sw count=1
-SW=`cat /tmp/sw`
-echo -n $SW > /dev/gpio0
-mkdir /dos
+SW=0010
 case $SW in
     ??0?)
         sleep 2
@@ -34,7 +31,7 @@ case $SW in
         udhcpc -s /usr/share/udhcpc/default.script
         rdate -s 132.163.97.4 # This should be replaced by a local server
         echo Mounting NFS root
-        mount.nfs -o nolock 128.232.65.94:/mnt/nfs2 /nfs 
+        mount.nfs -o nolock 128.232.65.94:/local/scratch/debian-hifive /nfs 
         echo Mounting proc
         mkdir -p /nfs/proc
         mount -t proc none /nfs/proc
