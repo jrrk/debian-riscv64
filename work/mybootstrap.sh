@@ -3,29 +3,19 @@ sudo rm -rf work/debian-riscv64-chroot
 #Make a directory to hold the riscv emulator
 sudo mkdir -p work/debian-riscv64-chroot/usr/bin
 #Copy the emulator
-sudo cp $TOP/qemu/riscv64-linux-user/qemu-riscv64 work/debian-riscv64-chroot/usr/bin/qemu-riscv64-static
+sudo cp ../qemu/riscv64-linux-user/qemu-riscv64 work/debian-riscv64-chroot/usr/bin/qemu-riscv64-static
+#Make sure the correct keyring is installed
+sudo apt install debootstrap debian-ports-archive-keyring
 #Perform the first stage bootstrap
-sudo debootstrap --foreign --arch=riscv64 --variant=minbase --keyring=/etc/apt/trusted.gpg \
+sudo debootstrap --arch=riscv64 --variant=minbase --keyring=/etc/apt/trusted.gpg \
      --include=gnupg sid work/debian-riscv64-chroot \
-     http://ftp.ports.debian.org/debian-ports || exit 1
-#Perform the second stage using the riscv emulator as an interpreter
-#This could fail due to missing dependencies
-sudo chroot work/debian-riscv64-chroot /debootstrap/debootstrap --second-stage
+     http://deb.debian.org/debian-ports || exit 1
 #Create the tmp directory (if needed)
 sudo mkdir -p -m 777 work/debian-riscv64-chroot/tmp
-#Fetch the last few unreleased packages
-cd work/debian-riscv64-chroot/tmp
-wget http://www.debianmirror.de/debian-ports/pool-riscv64/main/s/systemd/libudev1_238-2_riscv64.deb
-wget http://www.debianmirror.de/debian-ports/pool-riscv64/main/s/systemd/libsystemd0_238-2_riscv64.deb
-##wget http://www.debianmirror.de/debian-ports/pool-riscv64/main/d/db5.3/libdb5.3_5.3.28-13.1~riscv64_riscv64.deb
-wget http://www.debianmirror.de/debian-ports/pool-riscv64/main/libf/libffi/libffi7_3.3~rc0-2~riscv64_riscv64.deb
-cd ../../..
-#Install the unreleased packages
-sudo chroot work/debian-riscv64-chroot dpkg -i `ls -1 work/debian-riscv64-chroot/tmp | sed 's=^=tmp/='`
 #Update sources.list
 sudo cp work/sources.list work/debian-riscv64-chroot/etc/apt
 #Install the signing key
-sudo chroot work/debian-riscv64-chroot apt-key adv --recv-keys --keyserver keyserver.ubuntu.com 06AED62430CB581C
+sudo chroot work/debian-riscv64-chroot apt-key adv --recv-keys --keyserver keyserver.ubuntu.com DA1B2CEA81DCBC61
 #Update the apt fetch paths
 sudo chroot work/debian-riscv64-chroot apt update
 #Install the development environment

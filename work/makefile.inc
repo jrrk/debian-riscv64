@@ -9,7 +9,7 @@ chroot: ../rootfs.tar.xz
 	make -C ../qemu -j 4
 
 ../rootfs.tar.xz: work/mybootstrap.sh ../qemu/riscv64-linux-user/qemu-riscv64
-	sudo apt-key adv --recv-keys --keyserver keyserver.ubuntu.com 06AED62430CB581C 8B48AD6246925553 7638D0442B90D010 04EE7237B7D453EC
+	sudo apt-key adv --recv-keys --keyserver keyserver.ubuntu.com 06AED62430CB581C 8B48AD6246925553 7638D0442B90D010 04EE7237B7D453EC DA1B2CEA81DCBC61
 	sh work/mybootstrap.sh
 	sudo tar cJf - -C ${CHROOT_PATH} . > $@
 
@@ -37,7 +37,7 @@ init: ../rootfs.tar.xz work/busyboxinit.sh
 	cp -p ${CHROOT_PATH}/lib/riscv64-linux-gnu/libresolv.so.2 ./lib/riscv64-linux-gnu
 	cp -p ${CHROOT_PATH}/lib/riscv64-linux-gnu/librt.so.1 ./lib/riscv64-linux-gnu
 	cp -p ${CHROOT_PATH}/lib/riscv64-linux-gnu/libselinux.so.1 ./lib/riscv64-linux-gnu
-	cp -p ${CHROOT_PATH}/lib/riscv64-linux-gnu/libtirpc.so.1 ./lib/riscv64-linux-gnu
+	cp -p ${CHROOT_PATH}/lib/riscv64-linux-gnu/libtirpc.so.3 ./lib/riscv64-linux-gnu
 	cp -p ${CHROOT_PATH}/lib/riscv64-linux-gnu/libuuid.so.1 ./lib/riscv64-linux-gnu
 	cp work/busyboxinit.sh init
 	chmod +x init
